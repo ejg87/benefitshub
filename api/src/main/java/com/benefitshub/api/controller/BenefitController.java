@@ -22,13 +22,13 @@ public class BenefitController {
     private BenefitService benefitService;
 
     @GetMapping("/all")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<List<Benefit>> getAllBenefits() {
         return ResponseEntity.ok(benefitService.getAllBenefits());
     }
 
     @GetMapping("/my-benefits")
-    @PreAuthorize("hasRole('EMPLOYEE') or hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_EMPLOYEE') or hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<List<Benefit>> getMyBenefits() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
@@ -36,7 +36,7 @@ public class BenefitController {
     }
 
     @GetMapping("/my-benefits/active")
-    @PreAuthorize("hasRole('EMPLOYEE') or hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_EMPLOYEE') or hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<List<Benefit>> getMyActiveBenefits() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
@@ -44,20 +44,20 @@ public class BenefitController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Benefit> createBenefit(@Valid @RequestBody Benefit benefit) {
         return ResponseEntity.ok(benefitService.createBenefit(benefit));
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Benefit> updateBenefit(@PathVariable Long id,
                                                  @Valid @RequestBody Benefit benefit) {
         return ResponseEntity.ok(benefitService.updateBenefit(id, benefit));
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> deleteBenefit(@PathVariable Long id) {
         benefitService.deleteBenefit(id);
         return ResponseEntity.ok("Benefit deleted successfully");

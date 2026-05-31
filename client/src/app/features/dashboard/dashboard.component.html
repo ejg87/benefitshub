@@ -1,0 +1,56 @@
+<div class="dashboard-container">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <h1>BenefitsHub</h1>
+    </div>
+    <div class="navbar-user">
+      <span>Welcome, {{ user?.firstName }} {{ user?.lastName }}</span>
+      <button (click)="logout()" class="btn-logout">Sign Out</button>
+    </div>
+  </nav>
+
+  <main class="dashboard-main">
+    <div class="dashboard-header">
+      <h2>My Benefits</h2>
+      <p>View and manage your enrolled benefits</p>
+    </div>
+
+    <div class="loading" *ngIf="isLoading">
+      <p>Loading your benefits...</p>
+    </div>
+
+    <div class="alert alert-danger" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+
+    <div class="empty-state" *ngIf="!isLoading && benefits.length === 0">
+      <h3>No benefits found</h3>
+      <p>You have no benefits enrolled at this time.</p>
+    </div>
+
+    <div class="benefits-grid" *ngIf="!isLoading && benefits.length > 0">
+      <div class="benefit-card" *ngFor="let benefit of benefits">
+        <div class="benefit-card-header">
+          <span [class]="'badge ' + getBenefitTypeClass(benefit.type)">
+            {{ benefit.type }}
+          </span>
+          <span class="benefit-status" [class.active]="benefit.active">
+            {{ benefit.active ? 'Active' : 'Inactive' }}
+          </span>
+        </div>
+        <h3 class="benefit-name">{{ benefit.name }}</h3>
+        <p class="benefit-description">{{ benefit.description }}</p>
+        <div class="benefit-dates">
+          <div class="date-item">
+            <span class="date-label">Enrolled</span>
+            <span class="date-value">{{ benefit.enrollmentDate }}</span>
+          </div>
+          <div class="date-item" *ngIf="benefit.expirationDate">
+            <span class="date-label">Expires</span>
+            <span class="date-value">{{ benefit.expirationDate }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
